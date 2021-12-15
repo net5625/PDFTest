@@ -8,10 +8,10 @@ namespace TestPDF
     class Program
     {
         private static List<User> users = new List<User>(){
-            new User{Name = "Administrator", FirstName = "Administrator", LastName = "Administratorowie", Password = "admin", Role = Role.Administrator, Theme = true, Off = false },
-            new User{Name = "Dyrektor", FirstName = "Andrzej", LastName = "Bienia", Password = "fara", Role = Role.Dyrektor, Theme = true, Off = false },
-            new User{Name = "GHagel", FirstName = "Grzegorz", LastName = "Hagel", Password = "fara", Role = Role.Pracownik, Theme = true, Off = false },
-            new User{Name = "KGuzik", FirstName = "Kinga", LastName = "Guzik", Password = "fara", Role = Role.Wolontariusz, Theme = true, Off = false }
+            new User{Name = "Administrator", FirstName = "Administrator", LastName = "Administratorowie", Password = "pass", Role = Role.Administrator, Theme = true, Off = false },
+            new User{Name = "Dyrektor", FirstName = "Andrzej", LastName = "Kowalski", Password = "pass", Role = Role.Dyrektor, Theme = true, Off = false },
+            new User{Name = "GB", FirstName = "Grzegorz", LastName = "Brzęczyszczykiewicz", Password = "pass", Role = Role.Pracownik, Theme = true, Off = false },
+            new User{Name = "KG", FirstName = "Karol", LastName = "Gągorzelewski", Password = "pass", Role = Role.Wolontariusz, Theme = true, Off = false }
         };
 
         private static List<News> newses = new List<News>(){
