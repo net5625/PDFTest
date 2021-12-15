@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
-using System.Reflection.Metadata;
+﻿using System.Diagnostics;
 using System;
 using System.Collections.Generic;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.Rendering;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf.Content.Objects;
 
 namespace TestPDF
 {
@@ -54,7 +57,23 @@ namespace TestPDF
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            //Create document
+            MigraDoc.DocumentObjectModel.Document document = new MigraDoc.DocumentObjectModel.Document();
+
+
+            //Create section not page
+            Section section = document.AddSection();
+            
+            //Add content
+            section.AddParagraph("Raport wydarzeń:");
+
+            //Save
+            string fname = "Raport.pdf";
+            PdfDocumentRenderer renderer = new PdfDocumentRenderer(true);
+            renderer.Document = document;
+            renderer.RenderDocument();
+            renderer.PdfDocument.Save(fname);
+            Process.Start(fname);
         }
     }
 }
