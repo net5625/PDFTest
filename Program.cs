@@ -75,5 +75,45 @@ namespace TestPDF
             renderer.PdfDocument.Save(fname);
             Process.Start(fname);
         }
+
+        public Document CrateDocument(){
+            var document = new Document();
+            document.Info.Title = "Raport";
+            document.Info.Subject = "Raport nadchodzących wydarzeń.";
+            document.Info.Author = "Newsroom";
+
+            DefineStyles(document);
+            CreatePage();
+            FillContent();
+            return document;
+        }
+
+        public void DefineStyles(Document document){
+            Style style = document.Styles["Normal"];
+            style.Font.Name = "Verdana";
+        }
+
+        public void CreatePage(Document document){
+            Section section = document.AddSection();
+
+            //FOOTER
+            Paragraph paragraph = section.Footers.Primary.AddParagraph();
+            paragraph.AddText("© Archidiecezjalna Rozgłośnia Radiowa Radio \"FARA\" - Newsroom");
+            paragraph.Format.Font.Size = 10;
+            paragraph.Format.Alignment = ParagraphAlignment.Center;
+
+            //Date Time
+            paragraph = section.AddParagraph();
+            paragraph.Format.SpaceBefore = "8cm";
+            paragraph.AddDateField("yyyy.MM.dd");
+
+            //Create Table
+            var table = section.AddTable();
+            table.Style = "Table";
+            table.Borders.Width = 0.5;
+            table.Rows.LeftIndent = 0;
+
+            ///<href>http://pdfsharp.net/wiki/Invoice-sample.ashx</href>
+        }
     }
 }
