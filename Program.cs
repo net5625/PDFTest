@@ -1,10 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System;
-using System.Collections.Generic;
-using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
-using PdfSharp.Drawing;
-using PdfSharp.Pdf.Content.Objects;
+using System.Diagnostics;
 
 namespace TestPDF
 {
@@ -57,63 +54,15 @@ namespace TestPDF
 
         static void Main(string[] args)
         {
-            //Create document
-            MigraDoc.DocumentObjectModel.Document document = new MigraDoc.DocumentObjectModel.Document();
-
-
-            //Create section not page
-            Section section = document.AddSection();
-            
-            //Add content
-            section.AddParagraph("Raport wydarzeń:");
-
-            //Save
-            string fname = "Raport.pdf";
+            MakePdf document = new MakePdf();
+            MigraDoc.DocumentObjectModel.Document pdf = document.CrateDocument();
+            MigraDoc.DocumentObjectModel.IO.DdlWriter.WriteToFile(pdf, "Raport.mdddl");
             PdfDocumentRenderer renderer = new PdfDocumentRenderer(true);
-            renderer.Document = document;
+            renderer.Document = pdf;
             renderer.RenderDocument();
+            string fname = "Raport.pdf";
             renderer.PdfDocument.Save(fname);
             Process.Start(fname);
-        }
-
-        public Document CrateDocument(){
-            var document = new Document();
-            document.Info.Title = "Raport";
-            document.Info.Subject = "Raport nadchodzących wydarzeń.";
-            document.Info.Author = "Newsroom";
-
-            DefineStyles(document);
-            CreatePage();
-            FillContent();
-            return document;
-        }
-
-        public void DefineStyles(Document document){
-            Style style = document.Styles["Normal"];
-            style.Font.Name = "Verdana";
-        }
-
-        public void CreatePage(Document document){
-            Section section = document.AddSection();
-
-            //FOOTER
-            Paragraph paragraph = section.Footers.Primary.AddParagraph();
-            paragraph.AddText("© Archidiecezjalna Rozgłośnia Radiowa Radio \"FARA\" - Newsroom");
-            paragraph.Format.Font.Size = 10;
-            paragraph.Format.Alignment = ParagraphAlignment.Center;
-
-            //Date Time
-            paragraph = section.AddParagraph();
-            paragraph.Format.SpaceBefore = "8cm";
-            paragraph.AddDateField("yyyy.MM.dd");
-
-            //Create Table
-            var table = section.AddTable();
-            table.Style = "Table";
-            table.Borders.Width = 0.5;
-            table.Rows.LeftIndent = 0;
-
-            ///<href>http://pdfsharp.net/wiki/Invoice-sample.ashx</href>
-        }
+        }        
     }
 }
