@@ -1,11 +1,10 @@
-using System;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
+using System.Collections.Generic;
 
 namespace TestPDF{
-public class MakePdf{
-
-        public MigraDoc.DocumentObjectModel.Document CrateDocument(){
+public class MakePdf : INewsObjects{
+        public MigraDoc.DocumentObjectModel.Document CrateDocument(List<News> lista){
 
             MigraDoc.DocumentObjectModel.Document document = new MigraDoc.DocumentObjectModel.Document();
             document.Info.Title = "Raport";
@@ -13,8 +12,7 @@ public class MakePdf{
             document.Info.Author = "Newsroom";
 
             DefineStyles(document);
-            CreatePage(document);
-            FillContent(document);
+            CreatePage(document, lista);
             return document;
         }
 
@@ -30,13 +28,12 @@ public class MakePdf{
 
             style = document.Styles.AddStyle("Table", "Normal");
             style.Font.Name = "Times New Roman";
-            style.Font.Size = 12;
+            style.Font.Size = 8;
         }
 
-        public void CreatePage(MigraDoc.DocumentObjectModel.Document document){
+        public void CreatePage(MigraDoc.DocumentObjectModel.Document document, List<News> lista){
+            document.DefaultPageSetup.Orientation = Orientation.Landscape;
             Section section = document.AddSection();
-            // PageSetup pageSetup = document.DefaultPageSetup.Clone();
-            // pageSetup.Orientation = Orientation.Landscape; //TODO: Change Orientation
 
             //FOOTER
             Paragraph paragraph = section.Footers.Primary.AddParagraph();
@@ -44,6 +41,10 @@ public class MakePdf{
             //paragraph.Style = ?? //TODO: Paragraph from styles
             paragraph.Format.Font.Size = 8;
             paragraph.Format.Alignment = ParagraphAlignment.Center;
+
+            //Header
+            paragraph = section.Headers.Primary.AddParagraph();
+            paragraph.AddPageField();
 
             //Date Time
             paragraph = section.AddParagraph();
@@ -59,9 +60,10 @@ public class MakePdf{
             table.Borders.Width = 0.5;
             table.Rows.LeftIndent = 0;
 
+
             #region Columns
             //Name
-            Column column = table.AddColumn("4cm");
+            Column column = table.AddColumn("3.5cm");
             column.Format.Alignment = ParagraphAlignment.Center;
             //Place
             column = table.AddColumn("4cm");
@@ -73,19 +75,19 @@ public class MakePdf{
             column = table.AddColumn("4cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //Notes
-            column = table.AddColumn("4cm");
+            column = table.AddColumn("2.4cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //Contact
-            column = table.AddColumn("4cm");
+            column = table.AddColumn("2cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //RealizationUser
-            column = table.AddColumn("2cm");
+            column = table.AddColumn("2.2cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //EnrolmentUser
-            column = table.AddColumn("2cm");
+            column = table.AddColumn("2.2cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //Creator
-            column = table.AddColumn("2cm");
+            column = table.AddColumn("2.2cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             #endregion
 
@@ -135,11 +137,56 @@ public class MakePdf{
             row.Cells[8].Format.Alignment = ParagraphAlignment.Left;
             #endregion
 
+            foreach(var item in lista){
+                Row rowItem = table.AddRow();
+                rowItem.TopPadding = 1;
+
+                var news = NotNull(item);
+
+                //Name
+                rowItem.Cells[0].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[0].AddParagraph(news.Name);
+
+                //Place
+                rowItem.Cells[1].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[1].AddParagraph(news.Place);
+
+                //Date
+                rowItem.Cells[2].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[2].AddParagraph(news.Date.ToString());
+
+                //Information
+                rowItem.Cells[3].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[3].AddParagraph(news.Information);
+
+                //Notes
+                rowItem.Cells[4].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[7].Format.Font.Size = 6;
+                rowItem.Cells[4].AddParagraph(news.Notes);
+
+                //Contact 
+                rowItem.Cells[5].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[7].Format.Font.Size = 7;
+                rowItem.Cells[5].AddParagraph(news.Contact);
+
+                //RealizationUser
+                rowItem.Cells[6].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[6].Format.Font.Size = 7;
+                rowItem.Cells[6].AddParagraph(news.RealizationUser.Name);
+
+                //EnrolmentUser
+                rowItem.Cells[7].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[7].Format.Font.Size = 7;
+                rowItem.Cells[7].AddParagraph(news.EnrolmentUser.Name);
+
+                //Creator
+                rowItem.Cells[8].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[8].Format.Font.Size = 7;
+                rowItem.Cells[8].AddParagraph(news.Creator.Name);
+
+            }
+
             ///<href>http://pdfsharp.net/wiki/Invoice-sample.ashx</href>
         }
-        public void FillContent(MigraDoc.DocumentObjectModel.Document document){
-            
-        }
-
 }
 }

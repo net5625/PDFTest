@@ -55,7 +55,7 @@ namespace TestPDF
         static void Main(string[] args)
         {
             MakePdf document = new MakePdf();
-            MigraDoc.DocumentObjectModel.Document pdf = document.CrateDocument();
+            MigraDoc.DocumentObjectModel.Document pdf = document.CrateDocument(newses);
             MigraDoc.DocumentObjectModel.IO.DdlWriter.WriteToFile(pdf, "Raport.mdddl");
             PdfDocumentRenderer renderer = new PdfDocumentRenderer(true);
             renderer.Document = pdf;
