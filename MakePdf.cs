@@ -15,7 +15,7 @@ public class MakePdf : INewsObjects{
             CreatePage(document, lista);
             return document;
         }
-
+//TODO: Check with normal data. (Long string etc.)
         public void DefineStyles(MigraDoc.DocumentObjectModel.Document document){
             Style style = document.Styles["Normal"];
             style.Font.Name = "Verdana";
@@ -29,6 +29,12 @@ public class MakePdf : INewsObjects{
             style = document.Styles.AddStyle("Table", "Normal");
             style.Font.Name = "Times New Roman";
             style.Font.Size = 8;
+
+            style = document.Styles.AddStyle("MyFooter", "Normal");
+            style.ParagraphFormat.Alignment = ParagraphAlignment.Right;
+            style.ParagraphFormat.Font.Size = 5;
+            style.ParagraphFormat.Font.Name = "Arial";
+            style.ParagraphFormat.Font.Color = Color.FromRgb(59, 59, 59);
         }
 
         public void CreatePage(MigraDoc.DocumentObjectModel.Document document, List<News> lista){
@@ -38,9 +44,7 @@ public class MakePdf : INewsObjects{
             //FOOTER
             Paragraph paragraph = section.Footers.Primary.AddParagraph();
             paragraph.AddText("© Archidiecezjalna Rozgłośnia Radiowa Radio \"FARA\" - Newsroom");
-            //paragraph.Style = ?? //TODO: Paragraph from styles
-            paragraph.Format.Font.Size = 8;
-            paragraph.Format.Alignment = ParagraphAlignment.Center;
+            paragraph.Style = "MyFooter";
 
             //Header
             paragraph = section.Headers.Primary.AddParagraph();
@@ -53,6 +57,7 @@ public class MakePdf : INewsObjects{
             paragraph.Format.Alignment = ParagraphAlignment.Right;
             paragraph.Format.Font.Size = 8;
             paragraph.Format.SpaceAfter = "1.2cm";
+            paragraph.Format.Font.Color = Color.FromRgb(59, 59, 59);
 
             //Create Table
             var table = section.AddTable();
@@ -102,41 +107,42 @@ public class MakePdf : INewsObjects{
             
             row.Cells[0].AddParagraph("Nazwa");
             row.Cells[0].Format.Font.Bold = true;
-            row.Cells[0].Format.Alignment = ParagraphAlignment.Left;
+            row.Cells[0].Format.Alignment = ParagraphAlignment.Center;
 
             row.Cells[1].AddParagraph("Miejsce");
             row.Cells[1].Format.Font.Bold = true;
-            row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
+            row.Cells[1].Format.Alignment = ParagraphAlignment.Center;
             //Date
             row.Cells[2].AddParagraph("Data");
             row.Cells[2].Format.Font.Bold = true;
-            row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
+            row.Cells[2].Format.Alignment = ParagraphAlignment.Center;
             //Information
             row.Cells[3].AddParagraph("Informacje");
             row.Cells[3].Format.Font.Bold = true;
-            row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
+            row.Cells[3].Format.Alignment = ParagraphAlignment.Center;
             //Notes
             row.Cells[4].AddParagraph("Notatki");
             row.Cells[4].Format.Font.Bold = true;
-            row.Cells[4].Format.Alignment = ParagraphAlignment.Left;
+            row.Cells[4].Format.Alignment = ParagraphAlignment.Center;
             //Contact
             row.Cells[5].AddParagraph("Kontakt");
             row.Cells[5].Format.Font.Bold = true;
-            row.Cells[5].Format.Alignment = ParagraphAlignment.Left;
+            row.Cells[5].Format.Alignment = ParagraphAlignment.Center;
             //RealizationUser
             row.Cells[6].AddParagraph("Realizacja");
             row.Cells[6].Format.Font.Bold = true;
-            row.Cells[6].Format.Alignment = ParagraphAlignment.Left;
+            row.Cells[6].Format.Alignment = ParagraphAlignment.Center;
             //EnrolmentUser
             row.Cells[7].AddParagraph("Wpis");
             row.Cells[7].Format.Font.Bold = true;
-            row.Cells[7].Format.Alignment = ParagraphAlignment.Left;
+            row.Cells[7].Format.Alignment = ParagraphAlignment.Center;
             //Creator
             row.Cells[8].AddParagraph("Autor");
             row.Cells[8].Format.Font.Bold = true;
-            row.Cells[8].Format.Alignment = ParagraphAlignment.Left;
+            row.Cells[8].Format.Alignment = ParagraphAlignment.Center;
             #endregion
 
+            #region Add Content To Table
             foreach(var item in lista){
                 Row rowItem = table.AddRow();
                 rowItem.TopPadding = 1;
@@ -145,48 +151,55 @@ public class MakePdf : INewsObjects{
 
                 //Name
                 rowItem.Cells[0].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[0].Format.Alignment = ParagraphAlignment.Center;
                 rowItem.Cells[0].AddParagraph(news.Name);
 
                 //Place
                 rowItem.Cells[1].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[1].Format.Alignment = ParagraphAlignment.Center;
                 rowItem.Cells[1].AddParagraph(news.Place);
 
                 //Date
                 rowItem.Cells[2].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[2].Format.Alignment = ParagraphAlignment.Center;
                 rowItem.Cells[2].AddParagraph(news.Date.ToString());
 
                 //Information
                 rowItem.Cells[3].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[3].Format.Alignment = ParagraphAlignment.Justify;
                 rowItem.Cells[3].AddParagraph(news.Information);
 
                 //Notes
                 rowItem.Cells[4].VerticalAlignment = VerticalAlignment.Center;
-                rowItem.Cells[7].Format.Font.Size = 6;
+                rowItem.Cells[4].Format.Alignment = ParagraphAlignment.Justify;
+                rowItem.Cells[4].Format.Font.Size = 6;
                 rowItem.Cells[4].AddParagraph(news.Notes);
 
                 //Contact 
                 rowItem.Cells[5].VerticalAlignment = VerticalAlignment.Center;
-                rowItem.Cells[7].Format.Font.Size = 7;
+                rowItem.Cells[5].Format.Alignment = ParagraphAlignment.Justify;
+                rowItem.Cells[5].Format.Font.Size = 7;
                 rowItem.Cells[5].AddParagraph(news.Contact);
 
                 //RealizationUser
                 rowItem.Cells[6].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[6].Format.Alignment = ParagraphAlignment.Center;
                 rowItem.Cells[6].Format.Font.Size = 7;
                 rowItem.Cells[6].AddParagraph(news.RealizationUser.Name);
 
                 //EnrolmentUser
                 rowItem.Cells[7].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[7].Format.Alignment = ParagraphAlignment.Center;
                 rowItem.Cells[7].Format.Font.Size = 7;
                 rowItem.Cells[7].AddParagraph(news.EnrolmentUser.Name);
 
                 //Creator
                 rowItem.Cells[8].VerticalAlignment = VerticalAlignment.Center;
+                rowItem.Cells[8].Format.Alignment = ParagraphAlignment.Center;
                 rowItem.Cells[8].Format.Font.Size = 7;
                 rowItem.Cells[8].AddParagraph(news.Creator.Name);
-
             }
-
-            ///<href>http://pdfsharp.net/wiki/Invoice-sample.ashx</href>
+            #endregion
         }
-}
+    }
 }
