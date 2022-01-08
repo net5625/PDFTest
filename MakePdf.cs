@@ -143,11 +143,19 @@ public class MakePdf : INewsObjects{
             #endregion
 
             #region Add Content To Table
+            bool color = true;
             foreach(var item in lista){
                 Row rowItem = table.AddRow();
                 rowItem.TopPadding = 1;
-
                 var news = NotNull(item);
+                if(color){
+                    rowItem.Shading.Color = Color.FromRgb(139, 193, 232);
+                    color = false;
+                }
+                else{
+                    rowItem.Shading.Color = Color.FromRgb(227, 227, 227);
+                    color = true;
+                }
 
                 //Name
                 rowItem.Cells[0].VerticalAlignment = VerticalAlignment.Center;
