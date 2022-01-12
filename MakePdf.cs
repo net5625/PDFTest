@@ -71,28 +71,28 @@ public class MakePdf : INewsObjects{
             Column column = table.AddColumn("3.5cm");
             column.Format.Alignment = ParagraphAlignment.Center;
             //Place
-            column = table.AddColumn("4cm");
+            column = table.AddColumn("3.5cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //Date
-            column = table.AddColumn("2.5cm");
+            column = table.AddColumn("1.5cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //Information
-            column = table.AddColumn("4cm");
+            column = table.AddColumn("4.5cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //Notes
             column = table.AddColumn("2.4cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //Contact
-            column = table.AddColumn("2cm");
+            column = table.AddColumn("2.4cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //RealizationUser
-            column = table.AddColumn("2.2cm");
+            column = table.AddColumn("2.4cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //EnrolmentUser
-            column = table.AddColumn("2.2cm");
+            column = table.AddColumn("2.4cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //Creator
-            column = table.AddColumn("2.2cm");
+            column = table.AddColumn("2.4cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             #endregion
 
