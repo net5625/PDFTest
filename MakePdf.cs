@@ -1,3 +1,4 @@
+using System;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ public class MakePdf : INewsObjects{
             CreatePage(document, lista);
             return document;
         }
-//TODO: Check with normal data. (Long string etc.)
+
         public void DefineStyles(MigraDoc.DocumentObjectModel.Document document){
             Style style = document.Styles["Normal"];
             style.Font.Name = "Verdana";
@@ -28,7 +29,7 @@ public class MakePdf : INewsObjects{
 
             style = document.Styles.AddStyle("Table", "Normal");
             style.Font.Name = "Times New Roman";
-            style.Font.Size = 8;
+            style.Font.Size = 10;
 
             style = document.Styles.AddStyle("MyFooter", "Normal");
             style.ParagraphFormat.Alignment = ParagraphAlignment.Right;
@@ -68,31 +69,31 @@ public class MakePdf : INewsObjects{
 
             #region Columns
             //Name
-            Column column = table.AddColumn("3.5cm");
+            Column column = table.AddColumn("3.8cm");
             column.Format.Alignment = ParagraphAlignment.Center;
             //Place
-            column = table.AddColumn("3.5cm");
+            column = table.AddColumn("3.8cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //Date
-            column = table.AddColumn("1.5cm");
+            column = table.AddColumn("1.8cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //Information
-            column = table.AddColumn("4.5cm");
+            column = table.AddColumn("5cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //Notes
-            column = table.AddColumn("2.4cm");
+            column = table.AddColumn("3cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //Contact
-            column = table.AddColumn("2.4cm");
+            column = table.AddColumn("3cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //RealizationUser
-            column = table.AddColumn("2.4cm");
+            column = table.AddColumn("1.8cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //EnrolmentUser
-            column = table.AddColumn("2.4cm");
+            column = table.AddColumn("1.8cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             //Creator
-            column = table.AddColumn("2.4cm");
+            column = table.AddColumn("1.8cm");
             column.Format.Alignment = ParagraphAlignment.Right;
             #endregion
 
@@ -179,35 +180,57 @@ public class MakePdf : INewsObjects{
 
                 //Notes
                 rowItem.Cells[4].VerticalAlignment = VerticalAlignment.Center;
-                rowItem.Cells[4].Format.Alignment = ParagraphAlignment.Justify;
-                rowItem.Cells[4].Format.Font.Size = 6;
-                rowItem.Cells[4].AddParagraph(news.Notes);
+                rowItem.Cells[4].Format.Alignment = ParagraphAlignment.Left;
+                rowItem.Cells[4].AddParagraph(Paragraph(news.Notes));
 
                 //Contact 
                 rowItem.Cells[5].VerticalAlignment = VerticalAlignment.Center;
-                rowItem.Cells[5].Format.Alignment = ParagraphAlignment.Justify;
-                rowItem.Cells[5].Format.Font.Size = 7;
-                rowItem.Cells[5].AddParagraph(news.Contact);
+                rowItem.Cells[5].Format.Alignment = ParagraphAlignment.Left;
+                rowItem.Cells[5].AddParagraph(Paragraph(news.Contact));
 
                 //RealizationUser
                 rowItem.Cells[6].VerticalAlignment = VerticalAlignment.Center;
                 rowItem.Cells[6].Format.Alignment = ParagraphAlignment.Center;
-                rowItem.Cells[6].Format.Font.Size = 7;
-                rowItem.Cells[6].AddParagraph(news.RealizationUser.Name);
+                rowItem.Cells[6].AddParagraph(UserName(news.RealizationUser.Name));
 
                 //EnrolmentUser
                 rowItem.Cells[7].VerticalAlignment = VerticalAlignment.Center;
                 rowItem.Cells[7].Format.Alignment = ParagraphAlignment.Center;
-                rowItem.Cells[7].Format.Font.Size = 7;
-                rowItem.Cells[7].AddParagraph(news.EnrolmentUser.Name);
+                rowItem.Cells[7].AddParagraph(UserName(news.EnrolmentUser.Name));
 
                 //Creator
                 rowItem.Cells[8].VerticalAlignment = VerticalAlignment.Center;
                 rowItem.Cells[8].Format.Alignment = ParagraphAlignment.Center;
-                rowItem.Cells[8].Format.Font.Size = 7;
-                rowItem.Cells[8].AddParagraph(news.Creator.Name);
+                rowItem.Cells[8].AddParagraph(UserName(news.Creator.Name));
             }
             #endregion
+        }
+        
+        public string UserName(string Name){
+            string GoodName = "";
+            short characters = 8;
+            if(Name.Length > characters){
+                GoodName = Name.Substring(0,characters) + Environment.NewLine + Name.Substring(characters);
+            }
+            else
+                GoodName = Name;
+            return GoodName;
+        }
+
+        public string Paragraph(string content){
+            string result = String.Empty;
+            short x = 17;
+            if(content.Length <= 20){
+                return content;
+            }
+            for(int i = 0; i < content.Length / (x+1); i++){
+                if((content.Length - 1) < ((i+1)*x)){
+                    result += content.Substring(i*x);
+                    break;
+                }
+                result += content.Substring(i*x, x) + "-" + Environment.NewLine;
+            }
+            return result;
         }
     }
 }
