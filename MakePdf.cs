@@ -1,4 +1,3 @@
-using System.Globalization;
 using System;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
@@ -182,12 +181,12 @@ public class MakePdf : INewsObjects{
                 //Notes
                 rowItem.Cells[4].VerticalAlignment = VerticalAlignment.Center;
                 rowItem.Cells[4].Format.Alignment = ParagraphAlignment.Left;
-                rowItem.Cells[4].AddParagraph(Paragraph(news.Notes, 12));
+                rowItem.Cells[4].AddParagraph(new Words(news.Notes,12).GetStringLines());
 
                 //Contact 
                 rowItem.Cells[5].VerticalAlignment = VerticalAlignment.Center;
                 rowItem.Cells[5].Format.Alignment = ParagraphAlignment.Left;
-                rowItem.Cells[5].AddParagraph(Paragraph(news.Contact,12));
+                rowItem.Cells[5].AddParagraph(new Words(news.Contact,12).GetStringLines());
 
                 //RealizationUser
                 rowItem.Cells[6].VerticalAlignment = VerticalAlignment.Center;
@@ -218,59 +217,5 @@ public class MakePdf : INewsObjects{
             return GoodName;
         }
 
-        public string Paragraph(string content, short width){
-            short x = width;
-            List<short> indexer = new List<short>();
-
-            if(content.Length <= x){
-                return content;
-            }
-            indexer = GetIndexesOfWhiteSpace(content);
-
-            for(int i = 0; i < indexer.Count - 1; i++){
-                int number;
-                if(i == 0){
-                    number = indexer[i];
-                    if(number > x){
-                        content = AddNewLine(content, indexer[i] + x);
-                        indexer = null;
-                        indexer = GetIndexesOfWhiteSpace(content);
-                        i = 0;
-                    }
-                }
-                number = indexer[i+1] - indexer[i];
-                if(number > x){
-                    content = AddNewLine(content, indexer[i] + x);
-                    indexer = null;
-                    indexer = GetIndexesOfWhiteSpace(content);
-                    i = 0;
-                }
-            }
-            return content;
-        }
-        // private static List<short> Increment(List<short> indexer, int x){
-        //     for(int j = x+1; j < indexer.Count; j++){
-        //         indexer[j] += 1;
-        //     }
-        //     return indexer;
-        // }
-        private static string AddNewLine(string content, int position){
-            return content.Substring(0, position) + Environment.NewLine + content.Substring(position);
-        }
-        private static List<short> GetIndexesOfWhiteSpace(string content){
-            short ind = 0;
-            List<short> indexer = new List<short>();
-
-            foreach(char c in content){
-                if(c == ' '){
-                    indexer.Add(ind);
-                }
-                ind += 1;
-            }
-            indexer.ForEach(i => Console.WriteLine(i));
-            Console.ReadKey();
-            Console.Clear();
-            return indexer;
-        }
     }
 }
